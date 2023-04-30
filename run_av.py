@@ -264,7 +264,7 @@ def evaluate(args, model, tokenizer, prefix=""):
 
 def load_and_cache_examples(args, tokenizer, evaluate=False, output_examples=False):
     # Load data features from cache or dataset file
-    input_dir = "../cache"
+    input_dir = "."
     cached_features_file = os.path.join(input_dir, 'intensive_reader_cached_{}_{}{}_{}_{}_{}_{}'.format(
         args.predict_file.split("/")[-1].replace(".json", ""),
         'dev' if evaluate else 'train', len(args.train_file.split(",")),
@@ -412,7 +412,7 @@ def main():
 
     # Setup CUDA, GPU & distributed training
     if args.local_rank == -1:
-        device = torch.device("cuda:1" if torch.cuda.is_available() else "cpu")
+        device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         args.n_gpu = 1 #torch.cuda.device_count()
     else:  # Initializes the distributed backend which will take care of sychronizing nodes/GPUs
         torch.cuda.set_device(args.local_rank)
