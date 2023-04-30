@@ -445,7 +445,9 @@ def main():
     tokenizer.do_lower_case = args.do_lower_case
 
     #model = model_class(model_files['model_file'], config=config)
-    model = model_class(model_files['model_file'])
+    phobert = AutoModel.from_pretrained("vinai/phobert-base")
+    #model = model_class(model_files['model_file'])
+    model = RobertaForQuestionAnswering(phobert.config).from_pretrained("vinai/phobert-base")
     
     if args.local_rank == 0:
         torch.distributed.barrier()  # Make sure only the first process in distributed training will download model & vocab
