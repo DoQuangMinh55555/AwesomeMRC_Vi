@@ -37,7 +37,7 @@ from tqdm import tqdm, trange
 
 from transformers import (WEIGHTS_NAME, 
                           RobertaConfig, RobertaForQuestionAnswering, PhobertTokenizer,
-                          XLMRobertaConfig, XLMRobertaTokenizer)
+                          XLMRobertaConfig, XLMRobertaTokenizer, AutoModel)
 
 from model import PhobertForQuestionAnsweringAVPool, XLMRobertaForQuestionAnsweringAVPool
 
