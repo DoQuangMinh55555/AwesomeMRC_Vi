@@ -41,12 +41,14 @@ from transformers import (WEIGHTS_NAME,
                           XLMRobertaConfig, XLMRobertaForQuestionAnswering, XLMRobertaTokenizer,
                           BertConfig, BertForQuestionAnswering, BertTokenizer)
 from model import XLMRobertaForQuestionAnsweringSeqTrm, XLMRobertaForQuestionAnsweringSeqTrmMixLayer
+from model_cls import PhobertMixLayer
 
 from transformers import AdamW, get_linear_schedule_with_warmup
 from constant import MODEL_FILE
 logger = logging.getLogger(__name__)
 
 MODEL_CLASSES = {
+    'phobert_mixlayer_large': (RobertaConfig, PhobertMixLayer, PhobertTokenizer),
     'xlm_roberta_ma_large': (XLMRobertaConfig, XLMRobertaForQuestionAnsweringSeqTrm, XLMRobertaTokenizer),
     'xlm_roberta_ma': (XLMRobertaConfig, XLMRobertaForQuestionAnsweringSeqTrm, XLMRobertaTokenizer),
     'xlm_roberta_ma_mixlayer_large': (XLMRobertaConfig, XLMRobertaForQuestionAnsweringSeqTrmMixLayer, XLMRobertaTokenizer),
