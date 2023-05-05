@@ -123,7 +123,7 @@ def train(args, train_dataset, model, tokenizer):
                 'attention_mask':  batch[1],
                 'start_positions': batch[3],
                 'end_positions':   batch[4],
-                #'is_impossibles':   batch[5]
+                'is_impossibles':   batch[5]
             }
 
             outputs = model(**inputs)
