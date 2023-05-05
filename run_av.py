@@ -46,8 +46,7 @@ from constant import MODEL_FILE
 logger = logging.getLogger(__name__)
 
 MODEL_CLASSES = {
-    #'phobert': (RobertaConfig, PhobertForQuestionAnsweringAVPool, PhobertTokenizer),
-    'phobert': (RobertaConfig, RobertaForQuestionAnswering, PhobertTokenizer),
+    'phobert_large': (RobertaConfig, PhobertForQuestionAnsweringAVPool, PhobertTokenizer),
     'xlm_roberta': (XLMRobertaConfig, XLMRobertaForQuestionAnsweringAVPool, XLMRobertaTokenizer),
     'xlm_roberta_large': (XLMRobertaConfig, XLMRobertaForQuestionAnsweringAVPool, XLMRobertaTokenizer)
 }
@@ -161,8 +160,8 @@ def train(args, train_dataset, model, tokenizer):
                     if not os.path.exists(output_dir):
                         os.makedirs(output_dir)
                     model_to_save = model.module if hasattr(model, 'module') else model  # Take care of distributed/parallel training
-                    #torch.save(model_to_save.state_dict(), os.path.join(output_dir, "pytorch_model.bin"))
-                    model_to_save.save_pretrained(output_dir)
+                    torch.save(model_to_save.state_dict(), os.path.join(output_dir, "pytorch_model.bin"))
+                    #model_to_save.save_pretrained(output_dir)
                     torch.save(args, os.path.join(output_dir, 'training_args.bin'))
                     logger.info("Saving model checkpoint to %s", output_dir)
 
@@ -474,8 +473,8 @@ def main():
         # Save a trained model, configuration and tokenizer using `save_pretrained()`.
         # They can then be reloaded using `from_pretrained()`
         model_to_save = model.module if hasattr(model, 'module') else model  # Take care of distributed/parallel training
-        #torch.save(model_to_save.state_dict(), os.path.join(args.output_dir,'pytorch_model.bin'))
-        model_to_save.save_pretrained(args.output_dir)
+        torch.save(model_to_save.state_dict(), os.path.join(args.output_dir,'pytorch_model.bin'))
+        #model_to_save.save_pretrained(args.output_dir)
         # tokenizer.save_pretrained(args.output_dir)
 
         # Good practice: save your training arguments together with the trained model
