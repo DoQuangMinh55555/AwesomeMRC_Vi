@@ -516,9 +516,9 @@ def main():
             # Reload the model
             global_step = checkpoint.split('-')[-1] if len(checkpoints) > 1 else ""
             config = config_class.from_pretrained(model_files['config_file'], num_labels= 2)
-            #model = model_class(model_files['model_file'], config=config)
-            phobert = AutoModel.from_pretrained("vinai/phobert-base")
-            model = RobertaForQuestionAnswering(phobert.config).from_pretrained("vinai/phobert-base")
+            model = model_class(model_files['model_file'], config=config)
+            #phobert = AutoModel.from_pretrained("vinai/phobert-base")
+            #model = RobertaForQuestionAnswering(phobert.config).from_pretrained("vinai/phobert-base")
             model.load_state_dict(torch.load(os.path.join(checkpoint, "pytorch_model.bin"), map_location= torch.device(args.device)))
             model.to(args.device)
 
