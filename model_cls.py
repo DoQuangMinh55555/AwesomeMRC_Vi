@@ -43,6 +43,46 @@ class HSUM(nn.Module):
             return avg_logits
         return total_loss, avg_logits
 
+class PSUM(nn.Module):
+    def __init__(self, count, config, num_labels):
+        super(PSUM, self).__init__()
+        self.count = count
+        self.num_labels = num_labels
+        self.pre_layers = torch.nn.ModuleList()
+        self.loss_fct = torch.nn.ModuleList()
+        self.pooler = RobertaPooler(config)
+        self.classifier = torch.nn.Linear(config.hidden_size, num_labels)
+        for i in range(count):
+            self.pre_layers.append(RobertaLayer(config))
+            self.loss_fct.append(torch.nn.CrossEntropyLoss(ignore_index=-1))
+        self.init_weights()
+
+    def init_weights(self):
+        init.xavier_uniform_(self.classifier.weight.data)
+        self.classifier.bias.data.uniform_(0, 0)
+
+    def forward(self, layers, attention_mask, labels):
+        losses = []
+        logitses = []
+        #output = torch.zeros_like(layers[0])
+        total_loss = torch.Tensor(0)
+        for i in range(self.count):
+            #output = output + layers[-i-1]
+            #output = self.pre_layers[i](output, attention_mask)[0]
+            output = self.pre_layers[i](layers[-i-1], attention_mask)[0]
+            out = self.pooler(output)
+            logits = self.classifier(out)
+            if labels is not None:
+                loss = self.loss_fct[i](logits.view(-1, self.num_labels), labels.view(-1))
+                losses.append(loss)
+            logitses.append(logits)
+        if labels is not None:
+            total_loss = torch.sum(torch.stack(losses), dim=0)
+        avg_logits = torch.sum(torch.stack(logitses), dim=0)/self.count
+        if labels is None:
+            return avg_logits
+        return total_loss, avg_logits
+
 class PhobertMixLayer(nn.Module):
     def __init__(self, model_path, config, count, mix_type= "HSUM"):
         super(PhobertMixLayer, self).__init__()
