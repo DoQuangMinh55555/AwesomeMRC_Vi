@@ -115,7 +115,7 @@ def main():
                         fin_cof = cof
                         fin_best_cof = best_cof
                     #print("cur_score", score, "\t", cof, "\t", best_cof,"\t", "cur_best", best_score, "\t", fin_cof,
-                          "\t", fin_best_cof)
+                          #"\t", fin_best_cof)
     else:
         fin_cof = [float(x.strip()) for x in args.fin_cof.split(",")]
 
